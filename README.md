@@ -12,7 +12,7 @@ CPU supporting AVX/AVX2
 #### Packages
 Tensorflow >= 2.1
 
-Nvidia CUDA >= 10.1
+Nvidia CUDA >= 10.1 (with cudnn library)
 
 Pytorch >= 1.5
 

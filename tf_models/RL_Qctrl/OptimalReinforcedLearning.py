@@ -52,7 +52,7 @@ print(device_lib.list_local_devices())
 
 from ML4QC.tf_tensormath import qc_helper
 from ML4QC.tf_tensormath import basicOps
-from ML4QC.RL_Qctrl.environment import PulseResponseEnv
+from ML4QC.tf_models.RL_Qctrl.environment import PulseResponseEnv
 
 sigmax = tf.constant([[0,1],[1,0]],dtype=tf.complex128)
 sigmaz = tf.constant([[1,0],[0,-1]],dtype=tf.complex128)

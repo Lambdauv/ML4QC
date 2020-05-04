@@ -2,6 +2,7 @@
 ## Welcome to Machine Learning for Quantum Computing (ML4QC)
 
 The package is developed to leverage the exciting state-of-art machine learning toolboxes developed by Google (tensorflow) and Facebook (pytorch) for parsing quantum system output and optimizing quanutm controls. In this way, human researchers can outsource jobs more suitable to machines and focus on enssential matters regarding pushing the envolope of engeering better quantum computing hardwares and seeking NISQ killer app algorithms.
+
 We welcome quantum, machine learning, applied math, and computer science experts to contribute to the development of an universal framework for intelligently interfacing various quantum systems in NISQ-era and beyond.
 
 ### Requirements

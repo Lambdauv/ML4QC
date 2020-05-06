@@ -145,10 +145,12 @@ class crossTalkConvNet(nn.Module):
         Ntimes = self.Ntimes
         Nfreqs = self.Nfreqs
         device = configs["device"]
+        net = nn.DataParallel(self)
+        net.to(device)
         if data==None:
             data = self.randomDataGen(configs)   
         criterion = nn.MSELoss()
-        optimizer = optim.Adam(self.parameters(), lr=lr)
+        optimizer = optim.Adam(net.parameters(), lr=lr)
         running_loss = [0,0,0.0]
         for epoch in range(Nepoch):
             running_loss[2] = 0.0
@@ -156,14 +158,14 @@ class crossTalkConvNet(nn.Module):
                 inputImgs = data["inputImagBatch"].double().to(device)
                 targetBatch = data["labelBatch"].double().to(device)
                 optimizer.zero_grad()
-                outputs = self(inputImgs)
+                outputs = net(inputImgs)
                 loss = criterion(outputs, targetBatch)
                 loss.backward()
                 optimizer.step()
-                self.writer.add_histogram('conv1_weights',self.conv1.weight, step*(epoch+1))
-                self.writer.add_histogram('conv2_weights',self.conv2.weight, step*(epoch+1))
-                self.writer.add_histogram('conv3_weights',self.conv3.weight, step*(epoch+1))
-                self.writer.add_histogram('fc1_weights',self.fc1.weight, step*(epoch+1))
+                self.writer.add_histogram('conv1_weights',net.module.conv1.weight, step*(epoch+1))
+                self.writer.add_histogram('conv2_weights',net.module.conv2.weight, step*(epoch+1))
+                self.writer.add_histogram('conv3_weights',net.module.conv3.weight, step*(epoch+1))
+                self.writer.add_histogram('fc1_weights',net.module.fc1.weight, step*(epoch+1))
                 running_loss[2] += loss.item()
                 running_loss[0] =  epoch + 1
                 running_loss[1] = step + 1
@@ -172,6 +174,7 @@ class crossTalkConvNet(nn.Module):
                     print('[%d, %5d] loss: %.3f' %
                           (epoch + 1, step + 1, running_loss[2] / ReportNstep))
                     running_loss[2] = 0.0
+        self.load_state_dict(net.module.state_dict())
         return self
 
     def save(self,filename):
